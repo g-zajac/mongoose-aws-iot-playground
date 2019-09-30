@@ -8,7 +8,7 @@ modules_version: ${mos.version}
 mongoose_os_version: ${mos.version}
 
 config_schema:
-  - ["mqtt.server", "iot.eclipse.org:1883"]
+  - ["mqtt.server", "10.0.10.30:1883"]
   - ["i2c.enable", true]
 
 tags:
@@ -20,6 +20,7 @@ filesystem:
 libs:
 # common mgos libs
   - origin: https://github.com/mongoose-os-libs/boards
+  - origin: https://github.com/mongoose-os-libs/js-demo-bundle
   - origin: https://github.com/mongoose-os-libs/ca-bundle
   - origin: https://github.com/mongoose-os-libs/i2c
   - origin: https://github.com/mongoose-os-libs/rpc-service-config
