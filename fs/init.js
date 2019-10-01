@@ -15,8 +15,8 @@ strip.show();
 
 // GPIO pin which has a DHT sensor data wire connected
 let pin = 16;
-let ver = 1.79;
-let state = {on: false};
+let ver = 1.83;
+let sensor = {working: false};
 // Initialize DHT library
 let dht = DHT.create(pin, DHT.DHT22);
 let topic = 'rack/homekit/#';
@@ -25,30 +25,25 @@ MQTT.sub(topic, function(conn, topic, msg) {
 }, null);
 
 // This function reads data from the DHT sensor every 2 second
-Timer.set(2000 /* milliseconds */, Timer.REPEAT, function() {
+Timer.set(10000 /* milliseconds */, Timer.REPEAT, function() {
   strip.setPixel(1, 0, 50, 0);
   strip.show();
-  let t = dht.getTemp();
-  let h = dht.getHumidity();
-  if (isNaN(h) || isNaN(t)) {
+  sensor.temperature = dht.getTemp();
+  sensor.humidity = dht.getHumidity();
+  sensor.version = ver;
+  sensor.uptime = Sys.uptime();
+  sensor.working = true;
+  if (isNaN(sensor.temperature) || isNaN(sensor.humidity)) {
     print('Failed to read data from sensor');
+    sensor.working = false;
     return;
   }
-  print('Temperature:', t, '*C','  Humidity:', h, '%','  Version: ' ver);
-  strip.setPixel(1, 0, 10, 0);
-  strip.show();
-}, null);
-
-
-Timer.set(5000, Timer.REPEAT, function() {
-  strip.setPixel(2, 0, 50, 50);
-  strip.show();
-  state.uptime = Sys.uptime();
-  state.ram_free = Sys.free_ram();
-  let message = JSON.stringify(state);
-  let topic = "mongoose/sys";
+  // TODO send sensor.working message even if sensor disconected
+  print('Temperature:', sensor.temperature, '*C','  Humidity:', sensor.humidity, '%','  Version: ' sensor.version);
+  let message = JSON.stringify(sensor);
+  let topic = "mongoose/sensor";
   let ok = MQTT.pub(topic, message, 1);
   print('Published:', ok ? 'yes' : 'no', 'topic:', topic, 'message:', message);
-  strip.setPixel(2, 0, 10, 10);
+  strip.setPixel(1, 0, 10, 0);
   strip.show();
 }, null);
