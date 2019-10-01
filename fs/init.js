@@ -4,14 +4,29 @@ load('api_dht.js');
 load('api_sys.js');
 load('api_mqtt.js');
 load('api_config.js');
-load('api_neopixel.js');
+load('api_arduino_ssd1306.js');
 
-let pin = 17, numPixels = 8, colorOrder = NeoPixel.GRB;
-let strip = NeoPixel.create(pin, numPixels, colorOrder);
+// Initialize Adafruit_SSD1306 library (I2C)
+let d = Adafruit_SSD1306.create_i2c(2 /* RST GPIO */, Adafruit_SSD1306.RES_128_64);
+// Initialize the display. 0x78 myoled for test, external
+d.begin(Adafruit_SSD1306.SWITCHCAPVCC, 0x78, true /* reset */);
+d.display();
+let i = 0;
 
-strip.clear();
-strip.setPixel(0, 10, 0, 0);
-strip.show();
+let showStr = function(d, str) {
+  d.clearDisplay();
+  d.setTextSize(2);
+  d.setTextColor(Adafruit_SSD1306.WHITE);
+  d.setCursor(d.width() / 4, d.height() / 4);
+  d.write(str);
+  d.display();
+};
+
+Timer.set(1000 /* milliseconds */, Timer.REPEAT, function() {
+  showStr(d, "i = " + JSON.stringify(i));
+  print("i = ", i);
+  i++;
+}, null);
 
 // GPIO pin which has a DHT sensor data wire connected
 let pin = 16;
@@ -26,8 +41,6 @@ MQTT.sub(topic, function(conn, topic, msg) {
 
 // This function reads data from the DHT sensor every 2 second
 Timer.set(10000 /* milliseconds */, Timer.REPEAT, function() {
-  strip.setPixel(1, 0, 50, 0);
-  strip.show();
   sensor.temperature = dht.getTemp();
   sensor.humidity = dht.getHumidity();
   sensor.version = ver;
@@ -44,6 +57,4 @@ Timer.set(10000 /* milliseconds */, Timer.REPEAT, function() {
   let topic = "mongoose/sensor";
   let ok = MQTT.pub(topic, message, 1);
   print('Published:', ok ? 'yes' : 'no', 'topic:', topic, 'message:', message);
-  strip.setPixel(1, 0, 10, 0);
-  strip.show();
 }, null);
