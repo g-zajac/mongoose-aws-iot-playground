@@ -4,15 +4,14 @@ load('api_dht.js');
 load('api_sys.js');
 load('api_mqtt.js');
 load('api_config.js');
-// load('api_arduino_ssd1306.js');
+load('api_arduino_ssd1306.js');
 
 // Initialize Adafruit_SSD1306 library (I2C)
 
-//let d = Adafruit_SSD1306.create_i2c(2 /* RST GPIO */, Adafruit_SSD1306.RES_128_64);
+let d = Adafruit_SSD1306.create_i2c(2 /* RST GPIO */, Adafruit_SSD1306.RES_128_64);
 // Initialize the display. 0x78 myoled for test, external
-
-//d.begin(Adafruit_SSD1306.SWITCHCAPVCC, 0x78, true /* reset */);
-//d.display();
+d.begin(Adafruit_SSD1306.SWITCHCAPVCC, 0x78, true /* reset */);
+d.display();
 let i = 0;
 
 // let showStr = function(d, str) {
