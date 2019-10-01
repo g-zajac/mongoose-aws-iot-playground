@@ -25,7 +25,7 @@ MQTT.sub(topic, function(conn, topic, msg) {
 }, null);
 
 // This function reads data from the DHT sensor every 2 second
-Timer.set(2000 /* milliseconds */, Timer.REPEAT, function() {
+Timer.set(10000 /* milliseconds */, Timer.REPEAT, function() {
   strip.setPixel(1, 0, 50, 0);
   strip.show();
   sensor.temperature = dht.getTemp();
