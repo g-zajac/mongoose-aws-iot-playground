@@ -10,6 +10,7 @@ load('api_arduino_ssd1306.js');
 
 let d = Adafruit_SSD1306.create_i2c(2 /* RST GPIO */, Adafruit_SSD1306.RES_128_64);
 // Initialize the display. 0x78, 0x3D,  0x3c myoled for test, external
+// wemos oled: OLED display are pin5 (SDA) and pin4 (SCL), SSD1306 display(0x3c, 5, 4);
 d.begin(Adafruit_SSD1306.SWITCHCAPVCC, 0x3c, true /* reset */);
 d.display();
 let i = 0;
