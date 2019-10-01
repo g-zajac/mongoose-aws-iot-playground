@@ -9,6 +9,7 @@ mongoose_os_version: ${mos.version}
 
 config_schema:
   - ["i2c.enable", true]
+  # swaped for Wemos OLED board
   - ["i2c.sda_gpio", 5]
   - ["i2c.scl_gpio", 4]
 
@@ -19,7 +20,7 @@ filesystem:
   - fs
 
 libs:
-# common mgos libs
+# common libs
   - origin: https://github.com/mongoose-os-libs/boards
   # - origin: https://github.com/mongoose-os-libs/js-demo-bundle
   # bundle content:
@@ -65,7 +66,7 @@ libs:
   # - origin: https://github.com/mongoose-os-libs/vfs-dev-spi-flash
   # - origin: https://github.com/mongoose-os-libs/watson
   - origin: https://github.com/mongoose-os-libs/wifi
+  # extra libs
+  - origin: https://github.com/mongoose-os-libs/arduino-adafruit-ssd1306
   # remote scanning for i2c
   - origin: https://github.com/mongoose-os-libs/rpc-service-i2c.git
-
-  - origin: https://github.com/mongoose-os-libs/arduino-adafruit-ssd1306
