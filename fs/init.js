@@ -9,25 +9,25 @@ load('api_arduino_ssd1306.js');
 // Initialize Adafruit_SSD1306 library (I2C)
 
 let d = Adafruit_SSD1306.create_i2c(2 /* RST GPIO */, Adafruit_SSD1306.RES_128_64);
-// Initialize the display. 0x78 myoled for test, external
-d.begin(Adafruit_SSD1306.SWITCHCAPVCC, 0x78, true /* reset */);
+// Initialize the display. 0x78, 0x3D,  0x3c myoled for test, external
+d.begin(Adafruit_SSD1306.SWITCHCAPVCC, 0x3c, true /* reset */);
 d.display();
 let i = 0;
 
-// let showStr = function(d, str) {
-//   d.clearDisplay();
-//   d.setTextSize(2);
-//   d.setTextColor(Adafruit_SSD1306.WHITE);
-//   d.setCursor(d.width() / 4, d.height() / 4);
-//   d.write(str);
-//   d.display();
-// };
-//
-// Timer.set(1000 /* milliseconds */, Timer.REPEAT, function() {
-//   showStr(d, "i = " + JSON.stringify(i));
-//   print("i = ", i);
-//   i++;
-// }, null);
+let showStr = function(d, str) {
+  d.clearDisplay();
+  d.setTextSize(2);
+  d.setTextColor(Adafruit_SSD1306.WHITE);
+  d.setCursor(d.width() / 4, d.height() / 4);
+  d.write(str);
+  d.display();
+};
+
+Timer.set(1000 /* milliseconds */, Timer.REPEAT, function() {
+  showStr(d, "i = " + JSON.stringify(i));
+  print("i = ", i);
+  i++;
+}, null);
 
 // GPIO pin which has a DHT sensor data wire connected
 let pin = 16;
