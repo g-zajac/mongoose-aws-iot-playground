@@ -16,7 +16,7 @@ d.display();
 
 let showStr = function(d, str) {
   d.clearDisplay();
-  d.setTextSize(1);
+  d.setTextSize(2);
   d.setTextColor(Adafruit_SSD1306.WHITE);
   d.setCursor(d.width() / 4, d.height() / 4);
   d.write(str);
@@ -31,22 +31,19 @@ let showStr = function(d, str) {
 //     info.ssid=resp.wifi.ssid;
 // });
 
-Timer.set(5000 /* milliseconds */, Timer.REPEAT, function() {
-  showStr(d, Cfg.get('device.id'));
-}, null);
-
-// GPIO pin which has a DHT sensor data wire connected
-// let pin = 16;
-// let ver = 1.83;
-// let sensor = {working: false};
-
-// Initialize DHT library
-// let dht = DHT.create(pin, DHT.DHT22);
-
-// let topic = 'rack/homekit/#';
-// MQTT.sub(topic, function(conn, topic, msg) {
-//   print('Topic:', topic, 'message:', msg);
+// Timer.set(5000 /* milliseconds */, Timer.REPEAT, function() {
+//   showStr(d, Cfg.get('device.id'));
 // }, null);
+
+let topic = 'nodered/temperature';
+MQTT.sub(topic, function(conn, topic, msg) {
+  // print('Topic:', topic, 'message:', msg);
+  let rackTemp = JSON.parse(msg);
+  rackTemp = rackTemp.temperature;
+  print('rack temperature:', rackTemp);
+  showStr(d,JSON.stringify(rackTemp));
+
+}, null);
 
 // This function reads data from the DHT sensor every 2 second
 // Timer.set(60000 /* milliseconds */, Timer.REPEAT, function() {
