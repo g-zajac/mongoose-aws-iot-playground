@@ -70,3 +70,5 @@ libs:
   - origin: https://github.com/mongoose-os-libs/arduino-adafruit-ssd1306
   # remote scanning for i2c
   - origin: https://github.com/mongoose-os-libs/rpc-service-i2c.git
+
+  - origin: https://github.com/mongoose-os-apps/wifi-setup-web.git
