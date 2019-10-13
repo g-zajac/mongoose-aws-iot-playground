@@ -1,6 +1,8 @@
-# JS-enabled demo Mongoose OS firmware
+# mongoose-aws-iot-playground
 
-This is the JS demo Mongoose OS app. It gets installed by default at
-[Mongoose OS installation step](https://mongoose-os.com/docs/). It has
-a lot of functionality enabled - cloud integrations, JavaScript engine, etc.
-Its main purpose is to demonstrate the capabilities of Mongoose OS.
+This is the JS playground, IoT prototype using the ESP32 board with Mongoose OS.
+Feauters:
+- aws iot MQTT send/receive
+- shadow OTA
+- wifi config
+- oled display
