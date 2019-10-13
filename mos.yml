@@ -15,6 +15,9 @@ config_schema:
 
 tags:
   - js
+  - oled
+  - cloud
+  - aws
 
 filesystem:
   - fs
