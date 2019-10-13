@@ -13,27 +13,37 @@ let d = Adafruit_SSD1306.create_i2c(2 /* RST GPIO */, Adafruit_SSD1306.RES_128_6
 // wemos oled: OLED display are pin5 (SDA) and pin4 (SCL), SSD1306 display(0x3c, 5, 4);
 d.begin(Adafruit_SSD1306.SWITCHCAPVCC, 0x3c, true /* reset */);
 d.display();
+d.clearDisplay();
+d.setTextSize(1);
+// d.setTextColor(Adafruit_SSD1306.WHITE);
+d.setTextColor(Adafruit_SSD1306.WHITE, Adafruit_SSD1306.BLACK);
 
-let showStr = function(d, str) {
-  d.clearDisplay();
-  d.setTextSize(2);
-  d.setTextColor(Adafruit_SSD1306.WHITE);
-  d.setCursor(d.width() / 4, d.height() / 4);
+let showStr = function(d, line, str) {
+  let textHeight = 8;
+  //clear line
+  // d.setTextColor(BLACK);
+  d.setCursor(0,(line-1)*textHeight);
+  d.write("                   -"); //line 21 characters?
+  d.display();
+  // d.setTextColor(Adafruit_SSD1306.WHITE);
+  // d.setTextColor(WHITE);
+  d.setCursor(0,(line-1)*textHeight);
   d.write(str);
   d.display();
 };
 
-
-// let info ={};
-// RPC.call(RPC.LOCAL, 'Sys.GetInfo', null, function(resp, ud) {
-//     info.mac=resp.mac;
-//     info.ip=resp.wifi.sta_ip;
-//     info.ssid=resp.wifi.ssid;
-// });
-
-// Timer.set(5000 /* milliseconds */, Timer.REPEAT, function() {
-//   showStr(d, Cfg.get('device.id'));
-// }, null);
+Timer.set(1000 /* milliseconds */, Timer.REPEAT, function() {
+  RPC.call(RPC.LOCAL, 'Sys.GetInfo', null, function(resp, ud) {
+    // print('Response:', JSON.stringify(resp));
+    let deviceIP = "IP: " + resp.wifi.sta_ip;
+    showStr(d,2,deviceIP);
+    let time = "uptime: " + JSON.stringify(resp.uptime);
+    print("uptime ->", time);
+    showStr(d,3,time);
+  }, null);
+  let deviceID = "ID: " + Cfg.get('device.id');
+  showStr(d,1,deviceID);
+}, null);
 
 let topic = 'nodered/temperature';
 MQTT.sub(topic, function(conn, topic, msg) {
@@ -41,8 +51,8 @@ MQTT.sub(topic, function(conn, topic, msg) {
   let rackTemp = JSON.parse(msg);
   rackTemp = rackTemp.temperature;
   print('rack temperature:', rackTemp);
-  showStr(d,JSON.stringify(rackTemp));
-
+  let string2display = "temp: " + JSON.stringify(rackTemp);
+  showStr(d,8,string2display);
 }, null);
 
 // This function reads data from the DHT sensor every 2 second
