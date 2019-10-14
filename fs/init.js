@@ -15,24 +15,30 @@ d.begin(Adafruit_SSD1306.SWITCHCAPVCC, 0x3c, true /* reset */);
 d.display();
 d.clearDisplay();
 d.setTextSize(1);
-// d.setTextColor(Adafruit_SSD1306.WHITE);
-d.setTextColor(Adafruit_SSD1306.WHITE, Adafruit_SSD1306.BLACK);
+d.setTextColor(Adafruit_SSD1306.WHITE);
+// d.setTextColor(Adafruit_SSD1306.WHITE, Adafruit_SSD1306.BLACK);
+// d.setTextColor(0xFFFF, 0);
+// d.setTextColor(WHITE);
 
 let showStr = function(d, line, str) {
-  let textHeight = 8;
+  let textHeight = 8; //text size 1 - character height 7 pixels
   //clear line
   // d.setTextColor(BLACK);
-  d.setCursor(0,(line-1)*textHeight);
-  d.write("                   -"); //line 21 characters?
-  d.display();
+  // d.setCursor(0,(line-1)*textHeight);
+  // d.write("                   -"); //line 21 characters?
+  // d.display();
   // d.setTextColor(Adafruit_SSD1306.WHITE);
   // d.setTextColor(WHITE);
+
+  // d.fillRect(0, 0, 128, 7);
+
   d.setCursor(0,(line-1)*textHeight);
   d.write(str);
   d.display();
 };
 
-Timer.set(1000 /* milliseconds */, Timer.REPEAT, function() {
+Timer.set(10000 /* milliseconds */, Timer.REPEAT, function() {
+  d.clearDisplay();  //temporary, sort the clear line in showStr fn
   RPC.call(RPC.LOCAL, 'Sys.GetInfo', null, function(resp, ud) {
     // print('Response:', JSON.stringify(resp));
     let deviceIP = "IP: " + resp.wifi.sta_ip;
